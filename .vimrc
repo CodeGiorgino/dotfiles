@@ -111,8 +111,6 @@ set smartcase
 
 set fileformats=unix,dos,mac
 
-set shell=/usr/sbin/zsh
-
 " session management
 let g:session_directory = "~/.vim/session"
 let g:session_autoload = "no"
@@ -127,7 +125,8 @@ set ruler
 set rnu
 set number
 
-set guifont=JetBrainsMono:h11
+set guifont=JetBrains\ Mono\ Medium:h11
+au GUIEnter * simalt ~x
 
 let no_buffers_menu=1
 set termguicolors
@@ -147,7 +146,6 @@ set mouse=a
 set mousemodel=popup
 set t_Co=256
 set guioptions=egmrti
-set gfn=Monospace\ 10
 
 set scrolloff=20
 
@@ -162,7 +160,7 @@ set title
 set titleold="Terminal"
 set titlestring=%F
 
-set statusline=%F%m%r%h%w%=[%{&ff}/%Y]\ [%l\/%L]\ [%{strftime('%c')}]
+set statusline=%F%m%r%h%w%=[%{&ff}/%Y]\ [%l\/%L]\ [%{strftime('%Y-%m-%d\ %H:%M')}]
 
 " *****************************************************************************
 "  Abbreviations
