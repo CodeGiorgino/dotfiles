@@ -12,6 +12,8 @@ call plug#begin()
     Plug 'junegunn/vim-easy-align'
     Plug 'voldikss/vim-floaterm'
     Plug 'girishji/vimsuggest'
+    Plug 'dense-analysis/ale'
+    Plug 'ilyachur/cmake4vim'
 
     " colorschemes
     Plug 'morhetz/gruvbox'
@@ -46,8 +48,8 @@ command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-h
 nnoremap <Leader>rg :Find <CR>
 
 " floaterm
-nnoremap <C-t> :FloatermToggle <CR>
-tnoremap <C-t> <C-\><C-n>:FloatermToggle <CR>
+nnoremap <C-j> :FloatermToggle <CR>
+tnoremap <C-j> <C-\><C-n>:FloatermToggle <CR>
 
 " easy-align
 vnoremap <Leader>al :EasyAlign <CR>
@@ -84,6 +86,24 @@ let s:vim_suggest.search = {
     \ 'trigger': 't',
     \ 'prefixlen': 1,
 \ }
+
+" ale
+set signcolumn=yes
+let g:ale_enabled = 0
+let g:ale_virtualtext_cursor = 'disabled'
+let g:ale_completion_enabled = 0
+
+nnoremap K <cmd>ALEHover<CR>
+nnoremap <leader>gtd <cmd>ALEGoToDefinition<CR>
+nnoremap <leader>gtr <cmd>ALEFindReferences<CR>
+
+" cmake4vim
+let g:cmake_build_args = '--parallel 10'
+let g:make_arguments = '-j 10'
+
+" *****************************************************************************
+" Config
+" *****************************************************************************
 
 " Encoding
 set encoding=utf-8
@@ -124,6 +144,7 @@ syntax on
 set ruler
 set rnu
 set number
+set colorcolumn=80
 
 set guifont=JetBrains\ Mono\ Medium:h11
 au GUIEnter * simalt ~x
@@ -192,12 +213,6 @@ augroup vimrc-remember-cursor-position
       autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
-" txt
-augroup vimrc-wrapping
-    autocmd!
-      autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
-augroup END
-
 " make/cmake
 augroup vimrc-make-cmake
     autocmd!
@@ -211,11 +226,9 @@ set autoread
 "  Mappings
 " *****************************************************************************
 
-noremap  <Enter> :
+noremap  <Space> :
 inoremap <silent> <C-s> <C-C>:update<CR>
 vnoremap <silent> <C-s> <C-O>:update<CR>
-noremap <Leader>h :<C-u>split<CR>
-noremap <Leader>v :<C-u>vsplit<CR>
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in.
@@ -232,7 +245,7 @@ nnoremap <leader>sc :CloseSession<CR>
 
 " Tabs
 nnoremap <silent> <Tab> :tabnext<CR>
-nnoremap <silent> T :tabnew<CR>
+nnoremap <silent> <C-t> :tabnew<CR>
 
 " Buffers
 nnoremap <Leader>bn :bnext     <CR>
