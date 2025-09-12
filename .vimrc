@@ -78,8 +78,8 @@ call plug#begin()
     Plug 'ilyachur/cmake4vim'
     let g:cmake_build_args = '--parallel 10'
     let g:make_arguments = '-j 10'
-    let g:cmake_build_executor_split_mode = 'vsp'
-    let g:cmake_build_executor_window_size = 80
+    " let g:cmake_build_executor_split_mode = 'vsp'
+    let g:cmake_build_executor_window_size = 30
 
     Plug 'vim-airline/vim-airline'
 
@@ -127,8 +127,8 @@ set fileformats=unix,dos,mac
 
 " session management
 let g:session_directory = "~/.vim/session"
-let g:session_autoload = "yes"
-let g:session_autosave = "yes"
+let g:session_autoload = "no"
+let g:session_autosave = "no"
 let g:session_command_aliases = 1
 
 " *****************************************************************************
