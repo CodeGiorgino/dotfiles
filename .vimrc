@@ -68,26 +68,26 @@ call plug#begin()
 
     Plug 'dense-analysis/ale'
     set signcolumn=yes
-    let g:ale_enabled = 0
-    let g:ale_virtualtext_cursor = 'disabled'
     let g:ale_completion_enabled = 0
+    let g:ale_enabled = 0
+    let g:ale_fixers = ['clang-format']
+    let g:ale_virtualtext_cursor = 'disabled'
     nnoremap K <cmd>ALEHover<CR>
-    nnoremap <leader>gtd <cmd>ALEGoToDefinition<CR>
-    nnoremap <leader>gtr <cmd>ALEFindReferences<CR>
+    nnoremap gtd <cmd>ALEGoToDefinition<CR>
+    nnoremap gtr <cmd>ALEFindReferences<CR>
 
     Plug 'ilyachur/cmake4vim'
     let g:cmake_build_args = '--parallel 10'
-    let g:make_arguments = '-j 10'
-    " let g:cmake_build_executor_split_mode = 'vsp'
+    let g:cmake_build_dir = 'build'
     let g:cmake_build_executor_window_size = 30
+    let g:make_arguments = '-j 10'
 
     Plug 'vim-airline/vim-airline'
 
+    Plug 'mattn/emmet-vim'
+
     " colorschemes
     Plug 'morhetz/gruvbox'
-
-    " filetypes
-    Plug 'jlcrochet/vim-razor'
 call plug#end()
 
 set wildmode=list:longest,list:full
@@ -220,7 +220,7 @@ set autoread
 "  Mappings
 " *****************************************************************************
 
-nnoremap <Space> :
+noremap <Space> :
 inoremap <silent> <C-s> <C-C>:update<CR>
 vnoremap <silent> <C-s> <C-O>:update<CR>
 
