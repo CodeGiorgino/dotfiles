@@ -80,7 +80,8 @@ call plug#begin()
     let g:cmake_build_args = '--parallel 10'
     let g:cmake_build_dir = 'build'
     let g:cmake_build_executor_window_size = 30
-    let g:make_arguments = '-j 10'
+    let g:make_arguments = '-Wall -Wextra -j 10'
+    noremap <C-b> <Cmd>CMakeBuild<CR>
 
     Plug 'vim-airline/vim-airline'
 
