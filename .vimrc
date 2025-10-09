@@ -11,27 +11,27 @@ call plug#begin()
     Plug 'xolox/vim-session'
 
     Plug 'tpope/vim-fugitive'
-    " noremap <Leader>ga:  Gwrite<CR>
-    " noremap <Leader>gc:  Git commit --verbose<CR>
-    " noremap <Leader>gsh: Git push<CR>
-    " noremap <Leader>gll: Git pull<CR>
-    " noremap <Leader>gs:  Git<CR>
-    " noremap <Leader>gb:  Git blame<CR>
-    " noremap <Leader>gd:  Gvdiffsplit<CR>
-    " noremap <Leader>gr:  GRemove<CR>
+    " noremap <leader>ga:  Gwrite<cr>
+    " noremap <leader>gc:  Git commit --verbose<cr>
+    " noremap <leader>gsh: Git push<cr>
+    " noremap <leader>gll: Git pull<cr>
+    " noremap <leader>gs:  Git<cr>
+    " noremap <leader>gb:  Git blame<cr>
+    " noremap <leader>gd:  Gvdiffsplit<cr>
+    " noremap <leader>gr:  GRemove<cr>
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
-    nnoremap <Leader>ff :Files   <CR>
-    nnoremap <Leader>fg :GFiles  <CR>
-    nnoremap <Leader>fb :Buffers <CR>
+    nnoremap <leader>ff :Files   <cr>
+    nnoremap <leader>fg :GFiles  <cr>
+    nnoremap <leader>fb :Buffers <cr>
 
     Plug 'junegunn/vim-easy-align'
-    vnoremap <Leader>al :EasyAlign <CR>
+    vnoremap <leader>al :LiveEasyAlign <cr>
 
     Plug 'voldikss/vim-floaterm'
-    nnoremap <C-j> :FloatermToggle <CR>
-    tnoremap <C-j> <C-\><C-n>:FloatermToggle <CR>
+    nnoremap <C-j> :FloatermToggle <cr>
+    tnoremap <C-j> <C-\><C-n>:FloatermToggle <cr>
 
     Plug 'girishji/vimsuggest'
     let s:vim_suggest = {}
@@ -72,16 +72,16 @@ call plug#begin()
     let g:ale_enabled = 0
     let g:ale_fixers = ['clang-format']
     let g:ale_virtualtext_cursor = 'disabled'
-    nnoremap K <cmd>ALEHover<CR>
-    nnoremap gtd <cmd>ALEGoToDefinition<CR>
-    nnoremap gtr <cmd>ALEFindReferences<CR>
+    nnoremap K <cmd>ALEHover<cr>
+    nnoremap gtd <cmd>ALEGoToDefinition<cr>
+    nnoremap gtr <cmd>ALEFindReferences<cr>
 
     Plug 'ilyachur/cmake4vim'
     let g:cmake_build_args = '--parallel 10'
     let g:cmake_build_dir = 'build'
     let g:cmake_build_executor_window_size = 30
     let g:make_arguments = '-Wall -Wextra -j 10'
-    noremap <C-b> <Cmd>CMakeBuild<CR>
+    noremap <C-b> <Cmd>CMakeBuild<cr>
 
     Plug 'vim-airline/vim-airline'
 
@@ -221,35 +221,38 @@ set autoread
 "  Mappings
 " *****************************************************************************
 
-noremap <Space> :
-inoremap <silent> <C-s> <C-C>:update<CR>
-vnoremap <silent> <C-s> <C-O>:update<CR>
+noremap  <space> :
+
+noremap  <silent> <C-s> <cmd>update<cr>
+xnoremap <silent> s     <cmd>'<,'>sort<cr>
+
+inoremap <silent> <C-s> <C-c>:update<cr>
+vnoremap <silent> <C-s> <C-o>:update<cr>
 
 " Search mappings
 nnoremap n nzzzv
 nnoremap N Nzzzv
-noremap <Leader><Space> :nohl<CR>
-noremap  <silent> <C-s> :update<CR>
+noremap <leader><space> :nohl<cr>
 
 set grepprg=rg\ --vimgrep
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-nnoremap <Leader>rg :Find <CR>
+nnoremap <leader>rg :Find <cr>
 
 " Session management
-nnoremap <leader>so :OpenSession<Space>
-nnoremap <leader>ss :SaveSession<Space>
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
+nnoremap <leader>so :OpenSession<space>
+nnoremap <leader>ss :SaveSession<space>
+nnoremap <leader>sd :DeleteSession<cr>
+nnoremap <leader>sc :CloseSession<cr>
 
 " Tabs
-nnoremap <silent> <Tab> :tabnext<CR>
-nnoremap <silent> <C-t> :tabnew<CR>
+nnoremap <silent> <tab> :tabnext<cr>
+nnoremap <silent> T     :tabnew<cr>
 
 " Buffers
-nnoremap <Leader>bn :bnext     <CR>
-nnoremap <Leader>bp :bprevious <CR>
-nnoremap <Leader>bd :bdelete   <CR>
-nnoremap <Leader>bD :bdelete!  <CR>
+nnoremap <leader>bn :bnext     <cr>
+nnoremap <leader>bp :bprevious <cr>
+nnoremap <leader>bd :bdelete   <cr>
+nnoremap <leader>bD :bdelete!  <cr>
 
 " Copy/Paste/Cut
 if has('unnamedplus')
@@ -257,10 +260,10 @@ if has('unnamedplus')
 endif
 
 " copy to clipboard
-vnoremap <C-c> ::w !clip.exe<CR><CR>
+vnoremap <C-c> ::w !clip.exe<cr><cr>
 
-noremap YY "+y <CR>
-noremap <leader>p "+gP <CR>
+noremap YY "+y <cr>
+noremap <leader>p "+gP <cr>
 
 " Include user's local vim config
 if filereadable(expand("~/.vimrc.local"))
