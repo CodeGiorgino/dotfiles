@@ -101,6 +101,7 @@ alias cls='clear'
 alias so='source'
 
 # Navigation
+export LC_COLLATE="C"
 alias la='ls -la --color=auto'
 alias ..='cd ..'
 

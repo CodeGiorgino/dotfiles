@@ -1,0 +1,5 @@
+/etc/bash.bashrc
+$HOME/.dir_colors
+$HOME/.vimrc
+$HOME/.zshrc
+/root/.oh-my-zsh/custom/themes/theme.zsh-theme
