@@ -36,7 +36,7 @@ call plug#begin()
     nnoremap <leader>fb <cmd>Buffers<cr>
 
     Plug 'junegunn/vim-easy-align'
-    vnoremap <leader>al <cmd>LiveEasyAlign<cr>
+    vnoremap <leader>al :LiveEasyAlign<cr>
 
     Plug 'voldikss/vim-floaterm'
     nnoremap <C-t> <cmd>terminal<cr>
@@ -215,8 +215,7 @@ command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-h
 nnoremap <leader>rg <cmd>Find<cr>
 
 " Tabs
-nnoremap <pageup> <cmd>tabprevious<cr>
-nnoremap <pagedown> <cmd>tabnext<cr>
+nnoremap <Tab> <cmd>tabnext<cr>
 nnoremap T <cmd>tabnew<cr>
 
 " Buffers
