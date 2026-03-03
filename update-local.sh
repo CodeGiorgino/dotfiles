@@ -3,4 +3,4 @@
 echo 'Updating local files...'
 cat ./files.txt \
     | envsubst \
-    | while read file; do cp ./$(basename $file) $file; done
+    | while read file; do cp -r ./$(basename $file) $file; done
