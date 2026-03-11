@@ -111,6 +111,7 @@ alias f='fzf --preview "bat --color=always --style=numbers --line-range=:500 {}"
 export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
 
 # git
+alias gitssh='eval `ssh-agent -s` && ssh-add ~/.ssh/git'
 alias gits='git status -s'
 alias gitu='git fetch && git pull'
 

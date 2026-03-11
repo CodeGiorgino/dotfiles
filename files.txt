@@ -3,4 +3,7 @@ $HOME/.dir_colors
 $HOME/.vimrc
 $HOME/.zshrc
 $HOME/.oh-my-zsh/custom/themes/theme.zsh-theme
-$HOME/.config/kitty
+$HOME/.config/ashell/config.toml
+$HOME/.config/hypr/hyprland.conf
+$HOME/.config/hypr/hyprpaper.conf
+$HOME/.config/kitty/kitty.conf

@@ -216,6 +216,7 @@ nnoremap <leader>rg <cmd>Find<cr>
 
 " Tabs
 nnoremap <Tab> <cmd>tabnext<cr>
+nnoremap <S-Tab> <cmd>tabprev<cr>
 nnoremap T <cmd>tabnew<cr>
 
 " Buffers
@@ -235,3 +236,26 @@ vnoremap <C-c> y<cmd>call system('clip.exe', @")<cr>
 if filereadable(expand('~/.vimrc.local'))
     source ~/.vimrc.local
 endif
+
+" *****************************************************************************
+"  Functions
+" *****************************************************************************
+
+let g:build_cmd = ""
+
+function! SetBuildCommand(cmd)
+    let g:build_cmd = a:cmd
+    nnoremap <C-b> :call RunBuildCommand()<cr>
+    echo "Build command saved."
+endfunction
+
+function RunBuildCommand()
+    if g:build_cmd == ""
+        echo "No build command set! Use :call SetBuildCommand() first."
+        return
+    endif
+
+    exec 'term'
+    sleep 100m
+    call term_sendkeys(bufnr(""), g:build_cmd . "\<cr>")
+endfunction
