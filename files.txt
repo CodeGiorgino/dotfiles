@@ -1,9 +1,12 @@
 /etc/bash.bashrc
 $HOME/.dir_colors
 $HOME/.vimrc
+$HOME/.gdbinit
+$HOME/.gitconfig
 $HOME/.zshrc
 $HOME/.oh-my-zsh/custom/themes/theme.zsh-theme
 $HOME/.config/ashell/config.toml
+$HOME/.config/hypr/hypridle.conf
 $HOME/.config/hypr/hyprland.conf
 $HOME/.config/hypr/hyprpaper.conf
 $HOME/.config/kitty/kitty.conf

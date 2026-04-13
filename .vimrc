@@ -24,16 +24,24 @@ call plug#begin()
     " noremap <leader>gc  <cmd>Git commit --verbose<cr>
     " noremap <leader>gsh <cmd>Git push<cr>
     " noremap <leader>gll <cmd>Git pull<cr>
-    " noremap <leader>gs  <cmd>Git<cr>
-    " noremap <leader>gb  <cmd>Git blame<cr>
-    " noremap <leader>gd  <cmd>Gvdiffsplit<cr>
+    noremap <leader>gs  <cmd>Git<cr>
+    noremap <leader>gb  <cmd>Git blame<cr>
+    noremap <leader>gd  <cmd>Gvdiffsplit<cr>
     " noremap <leader>gr  <cmd>GRemove<cr>
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
+    nnoremap <leader>fb <cmd>Buffers<cr>
     nnoremap <leader>ff <cmd>Files<cr>
     nnoremap <leader>fg <cmd>GFiles<cr>
-    nnoremap <leader>fb <cmd>Buffers<cr>
+    nnoremap <leader>fm <cmd>Marks<cr>
+    nnoremap <leader>rg <cmd>Find<cr>
+
+    command! -bang -nargs=* Find
+                \ call fzf#vim#grep(
+                \   'rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow -g "!.git/*" -g "!build/*" --color "always" '
+                \       .shellescape(<q-args>),
+                \   fzf#vim#with_preview(), <bang>0)
 
     Plug 'junegunn/vim-easy-align'
     vnoremap <leader>al :LiveEasyAlign<cr>
@@ -126,7 +134,7 @@ let g:netrw_winsize   = 30
 
 " Cmdline autocompletion 
 set wildignorecase
-set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,build/**
 set wildmenu
 set wildmode=noselect:lastused,full
 set wildoptions=pum
@@ -210,13 +218,29 @@ vnoremap <C-s> <esc><cmd>update<cr>
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-set grepprg=rg\ --vimgrep
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-nnoremap <leader>rg <cmd>Find<cr>
+set grepprg=rg\ --vimgrep\ --column\ --line-number\ --no-heading\ --fixed-strings\ --ignore-case\ --hidden\ --follow\ --glob\ \"!.git/*\"\ --glob\ \"!build/*\"
+
+" Toggle Quickfix window with
+nnoremap <leader>q :call QuickfixToggle()<cr>
+
+let g:qf_open = 0
+function! QuickfixToggle()
+    if g:qf_open
+        cclose
+        let g:qf_open = 0
+    else
+        copen
+        let g:qf_open = 1
+    endif
+endfunction
 
 " Tabs
-nnoremap <Tab> <cmd>tabnext<cr>
-nnoremap <S-Tab> <cmd>tabprev<cr>
+nnoremap <C-Tab> <cmd>tabnext<cr>
+nnoremap <C-S-Tab> <cmd>tabprev<cr>
+
+tnoremap <C-Tab> <cmd>tabnext<cr>
+tnoremap <C-S-Tab> <cmd>tabprev<cr>
+
 nnoremap T <cmd>tabnew<cr>
 
 " Buffers
@@ -226,11 +250,7 @@ nnoremap <leader>bd <cmd>bdelete<cr>
 nnoremap <leader>bD <cmd>bdelete!<cr>
 
 " Copy
-if has('unnamedplus')
-    set clipboard=unnamed,unnamedplus
-endif
-
-vnoremap <C-c> y<cmd>call system('clip.exe', @")<cr>
+set clipboard=unnamedplus
 
 " Include user's local vim config
 if filereadable(expand('~/.vimrc.local'))
