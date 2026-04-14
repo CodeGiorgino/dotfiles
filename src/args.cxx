@@ -2,6 +2,8 @@
 
 #include <print>
 
+#include "commands.hxx"
+
 #define VERSION    "1.0.0"
 #define ANSI_BOLD  "\033[1m"
 #define ANSI_RESET "\033[0m"
@@ -134,11 +136,15 @@ namespace utils {
                             "Error: command: {:?}\n"
                             "       unknown option: {:?}", command, option));
             }
+            
+            commands::update(env);
         } else if (command == "diff") {
-            // TODO: not implemented yet
-            throw std::invalid_argument(
-                    std::format("Error: command not implemented yet: {:?}",
-                        command));
+            if (argn != argc - 1)
+                throw std::invalid_argument(
+                        std::format(
+                            "Error: command {:?}\n"
+                            "       unexpected trailing arguments", command));
+            commands::diff(env);
         } else throw std::invalid_argument(
                 std::format("Error: unknown command: {:?}", command));
     }

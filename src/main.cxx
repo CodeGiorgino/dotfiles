@@ -20,11 +20,5 @@ auto main(int argc, char** argv) -> int {
         return 1;
     }
 
-    std::println(
-            "enviroment:\n"
-            "   program:    {:?}\n"
-            "   origin:     {:?}\n"
-            "   sourcePath: {:?}", env.program, env.origin, env.sourcePath);
-
     return 0;
 }
