@@ -1,42 +1,50 @@
 #include "commands.hxx"
 
 #include <filesystem>
+#include <iostream>
 #include <print>
-#include <ranges>
 
 #include "parser.hxx"
 
 namespace fs = std::filesystem;
-namespace ranges = std::ranges;
-namespace views = std::ranges::views;
 
 namespace commands {
     auto update(const enviroment& env) -> void {
+        const auto repoFilesPath { fs::current_path() / "files" };
+        if (!fs::exists(repoFilesPath))
+            if (!fs::create_directory(repoFilesPath))
+                throw std::runtime_error(
+                        std::format(
+                            "Error: cannot create repository files directory: "
+                            "{:?}", repoFilesPath.string()));
+
         parser p { env.sourcePath };
-        for (const auto& line : p.lines()) {
-            fs::path filePath {};
-            for (const auto part : views::split(line, '/')) {
-                const std::string partStr { std::string_view { part } };
-                if (part.empty())
+        for (const auto& filePath : p.lines()) {
+            const auto hash = std::to_string(
+                    std::hash<std::string> {}(filePath));
+            if (env.target == "local") {
+                const auto repoFilePath { repoFilesPath / hash };
+                if (!fs::exists(repoFilePath)) {
+                    std::println(std::cerr,
+                            "Error: cannot find file in repository: {:?}\n"
+                            "       expected hashed file name: {:?}",
+                            filePath, hash);
                     continue;
-                else if (part[0] == '$') {
-                    const auto realPart = std::getenv(
-                            partStr.substr(1).c_str());
-                    if (!realPart)
-                        throw std::runtime_error(
-                                std::format(
-                                    "Error: cannot evaluate path: {:?}\n"
-                                    "       cannot find env variable: {:?}",
-                                    line, partStr));
-                    else filePath /= std::string { realPart };
-                } else filePath /= partStr;
+                }
+
+                const auto parentPath { fs::path { filePath }.parent_path() };
+                if (!fs::exists(parentPath)
+                        && !fs::create_directories(parentPath)) {
+                    std::println(std::cerr,
+                            "Error: cannot copy file to local path: {:?}\n"
+                            "       cannot create parent path", filePath);
+                    continue;
+                }
+
+                fs::copy(repoFilePath, filePath,
+                        fs::copy_options::overwrite_existing);
             }
-
-            std::println("filePath: {:?}", filePath.string());
         }
-
-        // TODO: not implemented yet
-        throw std::runtime_error("Error: commands::update not implemented yet");
     }
 
     auto diff(const enviroment& env) -> void {
