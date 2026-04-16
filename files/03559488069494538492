@@ -16,7 +16,7 @@ return {
                 }
             }
         },
-        config = function()
+        init = function()
             require("notify").setup({
                 background_colour = "#000000",
             })
