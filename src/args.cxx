@@ -99,23 +99,16 @@ namespace utils {
         };
 
         // parse command
-        const std::string command = arg_next();
-        if (command.empty())
+        env.command = arg_next();
+        if (env.command.empty())
             throw std::invalid_argument("Error: missing required command");
-        else if (command == "update") {
+        else if (env.command == "update") {
             env.target = arg_next();
             if (env.target.empty())
                 throw std::invalid_argument(
                         std::format(
                             "Error: missing required value for command: {:?}",
-                            command));
-            else if (env.target != "local"
-                    && env.target != "repo")
-                throw std::invalid_argument(
-                        std::format(
-                            "Error: command: {:?}\n"
-                            "       unknown target: {:?}", command,
-                            env.target));
+                            env.command));
 
             // parse options
             for (; argn < argc; argn++) {
@@ -130,22 +123,22 @@ namespace utils {
                                 std::format(
                                     "Error: command: {:?}\n"
                                     "       missing required value for option: {:?}",
-                                    command, option));
+                                    env.command, option));
                 } else throw std::invalid_argument(
                         std::format(
                             "Error: command: {:?}\n"
-                            "       unknown option: {:?}", command, option));
+                            "       unknown option: {:?}", env.command, option));
             }
 
             commands::update(env);
-        } else if (command == "diff") {
+        } else if (env.command == "diff") {
             if (argn != argc - 1)
                 throw std::invalid_argument(
                         std::format(
                             "Error: command {:?}\n"
-                            "       unexpected trailing arguments", command));
+                            "       unexpected trailing arguments", env.command));
             commands::diff(env);
         } else throw std::invalid_argument(
-                std::format("Error: unknown command: {:?}", command));
+                std::format("Error: unknown command: {:?}", env.command));
     }
 } // namespace utils

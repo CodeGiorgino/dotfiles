@@ -43,7 +43,12 @@ namespace commands {
 
                 fs::copy(repoFilePath, filePath,
                         fs::copy_options::overwrite_existing);
-            }
+            } else if (env.target == "repo") {
+
+            } else throw std::runtime_error(
+                    std::format(
+                        "Error: cannot execute command: {:?}\n"
+                        "       unknown target: {:?}", env.command, env.target));
         }
     }
 
