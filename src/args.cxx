@@ -41,8 +41,8 @@ ANSI_RESET
 ANSI_BOLD
 "COMMANDS                                                                      \n"
 ANSI_RESET
-"    update <origin> [<-s | --source> <file_path>]                             \n"
-"        Update files in origin:                                               \n"
+"    update <target> [<-s | --source> <file_path>]                             \n"
+"        Update files in target:                                               \n"
 "            - local: repository files overwrites local files.                 \n"
 "            - repo:  local files overwrites repository files.                 \n"
 "                                                                              \n"
@@ -103,19 +103,19 @@ namespace utils {
         if (command.empty())
             throw std::invalid_argument("Error: missing required command");
         else if (command == "update") {
-            env.origin = arg_next();
-            if (env.origin.empty())
+            env.target = arg_next();
+            if (env.target.empty())
                 throw std::invalid_argument(
                         std::format(
                             "Error: missing required value for command: {:?}",
                             command));
-            else if (env.origin != "local"
-                    && env.origin != "repo")
+            else if (env.target != "local"
+                    && env.target != "repo")
                 throw std::invalid_argument(
                         std::format(
                             "Error: command: {:?}\n"
-                            "       unknown origin: {:?}", command,
-                            env.origin));
+                            "       unknown target: {:?}", command,
+                            env.target));
 
             // parse options
             for (; argn < argc; argn++) {
@@ -136,7 +136,7 @@ namespace utils {
                             "Error: command: {:?}\n"
                             "       unknown option: {:?}", command, option));
             }
-            
+
             commands::update(env);
         } else if (command == "diff") {
             if (argn != argc - 1)

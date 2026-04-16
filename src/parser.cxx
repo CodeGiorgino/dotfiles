@@ -2,8 +2,11 @@
 
 #include <format>
 #include <fstream>
+#include <ranges>
 
 namespace fs = std::filesystem;
+namespace ranges = std::ranges;
+namespace views = std::ranges::views;
 
 parser::parser(std::string_view filePath) :
     filePath(fs::absolute(filePath)) {
@@ -47,6 +50,28 @@ auto parser::lines(void) noexcept -> std::generator<std::string> {
             continue;
         else if (line[0] == '#')
             continue;
-        else co_yield line;
+
+        fs::path realFilePath {};
+        if (line[0] == '/')
+            realFilePath /= "/";
+
+        for (const auto part : views::split(line, '/')) {
+            const std::string partStr { std::string_view { part } };
+            if (part.empty())
+                continue;
+            else if (part[0] == '$') {
+                const auto realPart = std::getenv(
+                        partStr.substr(1).c_str());
+                if (!realPart)
+                    throw std::runtime_error(
+                            std::format(
+                                "Error: cannot evaluate path: {:?}\n"
+                                "       cannot find env variable: {:?}",
+                                line, partStr));
+                else realFilePath /= std::string { realPart };
+            } else realFilePath /= partStr;
+        }
+
+        co_yield realFilePath.string();
     };
 }

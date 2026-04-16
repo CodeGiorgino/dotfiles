@@ -3,6 +3,6 @@
 
 struct enviroment final {
     [[maybe_unused]] std::string program {};
-    std::string origin {};
+    std::string target {};
     std::string sourcePath { "files.conf" };
 };
