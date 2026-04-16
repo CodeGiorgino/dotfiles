@@ -4,7 +4,6 @@
 #include "utils/args.hxx"
 
 auto main(int argc, char** argv) -> int {
-
     enviroment env;
     try {
         utils::parse_args(env, argc, argv);

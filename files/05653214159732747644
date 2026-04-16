@@ -71,6 +71,6 @@ vim.opt.wildignore     = "*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,build/**"
 -- insert mode autocompletion
 --
 
-vim.opt.autocomplete = true
-vim.opt.completeopt  = "popup"
-vim.opt.complete     = ".^5,w^5,b^5,u^5"
+-- vim.opt.autocomplete = true
+-- vim.opt.completeopt  = "popup"
+-- vim.opt.complete     = ".^5,w^5,b^5,u^5"
