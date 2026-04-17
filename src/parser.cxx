@@ -12,13 +12,13 @@ parser::parser(std::string_view filePath) :
     filePath(fs::absolute(filePath)) {
         if (!fs::exists(filePath))
             throw std::runtime_error(
-                    std::format("Error: cannot find file to parse: {:?}",
+                    std::format("parser error: cannot find file: [{}]",
                         filePath));
         else if (!fs::is_regular_file(filePath))
             throw std::runtime_error(
                     std::format(
-                        "Error: cannot parse file: {:?}\n"
-                        "       not a regular file", filePath));
+                        "parser error: file [{}]: not a regular file",
+                        filePath));
     }
 
 auto trim(std::string_view str) noexcept -> std::string_view {
@@ -37,7 +37,8 @@ auto parser::lines(void) noexcept -> std::generator<std::string> {
     std::ifstream streamIn { filePath };
     if (!streamIn)
         throw std::runtime_error(
-                std::format("Error: cannot open file to parse: {:?}",
+                std::format(
+                    "parser error: cannot open file: [{}]",
                     filePath.string()));
 
     std::string line;
@@ -65,8 +66,7 @@ auto parser::lines(void) noexcept -> std::generator<std::string> {
                 if (!realPart)
                     throw std::runtime_error(
                             std::format(
-                                "Error: cannot evaluate path: {:?}\n"
-                                "       cannot find env variable: {:?}",
+                                "parser error: line {:?}: cannot evaluate env variable: {:?}",
                                 line, partStr));
                 else realFilePath /= std::string { realPart };
             } else realFilePath /= partStr;

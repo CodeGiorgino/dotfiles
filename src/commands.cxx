@@ -19,7 +19,7 @@ namespace commands {
             if (!fs::create_directory(repoFilesPath))
                 throw std::runtime_error(
                         std::format(
-                            "Error: cannot create repository files directory: [{}]",
+                            "command error: cannot create repository files directory: [{}]",
                             repoFilesPath));
 
         parser p { env.sourcePath };
@@ -38,7 +38,7 @@ namespace commands {
             if (env.target == "local") {
                 if (!fs::exists(repoFilePath)) {
                     std::println(std::cerr,
-                            "Error: cannot find repository file: [{}] [{}]",
+                            "command error: cannot find repository file: [{}] [{}]",
                             hash, repoFilePath);
                     continue;
                 }
@@ -46,9 +46,8 @@ namespace commands {
                 if (!fs::exists(parentPath)
                         && !fs::create_directories(parentPath)) {
                     std::println(std::cerr,
-                            "Error: cannot copy file to local path: [{}]\n"
-                            "       cannot create parent path: [{}]", filename,
-                            parentPath);
+                            "command error: file [{}]: cannot create local path: [{}]",
+                            filename, parentPath);
                     continue;
                 }
 
@@ -60,7 +59,7 @@ namespace commands {
             } else if (env.target == "repo") {
                 if (!fs::exists(filePath)) {
                     std::println(std::cerr,
-                            "Error: cannot find local file: [{:20}] [{}]",
+                            "command error: cannot find local file: [{}] [{}]"
                             filename, parentPath);
                     continue;
                 }
@@ -72,8 +71,8 @@ namespace commands {
                         fs::copy_options::overwrite_existing);
             } else throw std::runtime_error(
                     std::format(
-                        "Error: cannot execute command: {:?}\n"
-                        "       unknown target: {:?}", env.command, env.target));
+                        "command error: command {:?}: unknown target: {:?}",
+                        env.command, env.target));
         }
     }
 
@@ -109,14 +108,15 @@ namespace commands {
 
             std::ifstream localStream { filePath };
             if (!localStream) {
-                std::println("Error: cannot open local file: [{}] [{}]",
+                std::println(
+                        "command error: cannot open local file: [{}] [{}]",
                         filename, parentPath);
                 continue;
             }
 
             std::ifstream repoStream { repoFilePath };
             if (!repoStream) {
-                std::println("Error: cannot open repository file: [{}] [{}]",
+                std::println("command error: cannot open repository file: [{}] [{}]",
                         hash, repoFilePath);
                 continue;
             }

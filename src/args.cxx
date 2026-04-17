@@ -102,7 +102,8 @@ namespace utils {
                 exit(0);
             } else if (option[0] == '-') {
                 throw std::invalid_argument(
-                        std::format("Error: unknown option: {:?}", option));
+                        std::format(
+                            "argument error: unknown option: {:?}", option));
             } else {
                 argn--;
                 break;
@@ -112,13 +113,14 @@ namespace utils {
         // parse command
         env.command = arg_next();
         if (env.command.empty())
-            throw std::invalid_argument("Error: missing required command");
+            throw std::invalid_argument(
+                    "argument error: missing required command");
         else if (env.command == "update") {
             env.target = arg_next();
             if (env.target.empty())
                 throw std::invalid_argument(
                         std::format(
-                            "Error: missing required value for command: {:?}",
+                            "argument error: command {:?}: missing required value"
                             env.command));
 
             // parse options
@@ -132,13 +134,12 @@ namespace utils {
                     if (env.sourcePath.empty())
                         throw std::invalid_argument(
                                 std::format(
-                                    "Error: command: {:?}\n"
-                                    "       missing required value for option: {:?}",
+                                    "argument error: command {:?}: missing required value for option: {:?}",
                                     env.command, option));
                 } else throw std::invalid_argument(
                         std::format(
-                            "Error: command: {:?}\n"
-                            "       unknown option: {:?}", env.command, option));
+                            "argument error: command {:?}: unknown option: {:?}",
+                            env.command, option));
             }
 
             commands::update(env);
@@ -154,17 +155,17 @@ namespace utils {
                     if (env.sourcePath.empty())
                         throw std::invalid_argument(
                                 std::format(
-                                    "Error: command: {:?}\n"
-                                    "       missing required value for option: {:?}",
+                                    "argument error: command {:?}: missing required value for option: {:?}",
                                     env.command, option));
                 } else throw std::invalid_argument(
                         std::format(
-                            "Error: command: {:?}\n"
-                            "       unknown option: {:?}", env.command, option));
+                            "argument error: command {:?}: unknown option: {:?}",
+                            env.command, option));
             }
 
             commands::diff(env);
         } else throw std::invalid_argument(
-                std::format("Error: unknown command: {:?}", env.command));
+                std::format("argument error: unknown command: {:?}",
+                    env.command));
     }
 } // namespace utils
