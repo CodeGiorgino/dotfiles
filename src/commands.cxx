@@ -59,7 +59,7 @@ namespace commands {
             } else if (env.target == "repo") {
                 if (!fs::exists(filePath)) {
                     std::println(std::cerr,
-                            "command error: cannot find local file: [{}] [{}]"
+                            "command error: cannot find local file: [{}] [{}]",
                             filename, parentPath);
                     continue;
                 }

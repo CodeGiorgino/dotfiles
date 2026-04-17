@@ -120,7 +120,7 @@ namespace utils {
             if (env.target.empty())
                 throw std::invalid_argument(
                         std::format(
-                            "argument error: command {:?}: missing required value"
+                            "argument error: command {:?}: missing required value",
                             env.command));
 
             // parse options
