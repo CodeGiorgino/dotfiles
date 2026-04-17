@@ -74,7 +74,34 @@ namespace commands {
     }
 
     auto diff(const enviroment& env) -> void {
-        // TODO: not implemented yet
-        throw std::runtime_error("Error: commands::diff not implemented yet");
+        std::println("{:22} {:22} status", "filename", "hash");
+
+        const std::string repoFilesPath { fs::current_path() / "files" };
+
+        parser p { env.sourcePath };
+        for (const auto& filePath : p.lines()) {
+            const std::string filename { fs::path { filePath }.filename() };
+
+            const std::string hash {
+                std::format("{:0>20}", std::hash<std::string> {}(filePath))
+            };
+
+            const std::string repoFilePath {
+                fs::path { repoFilesPath } / hash
+            };
+
+            std::print("[{:20}] [{}] ", filename, hash);
+
+            if (!fs::exists(repoFilePath)) {
+                std::println("missing");
+                continue;
+            } else if (!fs::exists(filePath)) {
+                std::println("missing local");
+                continue;
+            }
+
+            // TODO: check file content
+            throw std::runtime_error("Error: commands::diff not implemented yet");
+        }
     }
 } // namespace commands

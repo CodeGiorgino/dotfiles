@@ -51,10 +51,17 @@ ANSI_BOLD
 ANSI_RESET
 "            -s, --source <file_path>                                          \n"
 "                If specified, use the file provided for the update, otherwise \n"
-"                'files.txt' is used.                                          \n"
+"                'files.conf' is used.                                         \n"
 "                                                                              \n"
-"    diff                                                                      \n"
-"        Check for differences between local and repository files.             \n"
+"    diff [<-s | --source> <file_path>]                                        \n"
+"        Print a diff of the tracked files.                                    \n"
+"                                                                              \n"
+ANSI_BOLD
+"        Options:                                                              \n"
+ANSI_RESET
+"            -s, --source <file_path>                                          \n"
+"                If specified, use the file provided for the diff, otherwise   \n"
+"                'files.conf' is used.                                         \n"
         );
 }
 
@@ -132,11 +139,26 @@ namespace utils {
 
             commands::update(env);
         } else if (env.command == "diff") {
-            if (argn != argc - 1)
-                throw std::invalid_argument(
+            // parse options
+            for (; argn < argc; argn++) {
+                const auto option = arg_next();
+                if (option.empty())
+                    continue;
+                else if (option == "-s"
+                        || "--source") {
+                    env.sourcePath = arg_next();
+                    if (env.sourcePath.empty())
+                        throw std::invalid_argument(
+                                std::format(
+                                    "Error: command: {:?}\n"
+                                    "       missing required value for option: {:?}",
+                                    env.command, option));
+                } else throw std::invalid_argument(
                         std::format(
-                            "Error: command {:?}\n"
-                            "       unexpected trailing arguments", env.command));
+                            "Error: command: {:?}\n"
+                            "       unknown option: {:?}", env.command, option));
+            }
+
             commands::diff(env);
         } else throw std::invalid_argument(
                 std::format("Error: unknown command: {:?}", env.command));
