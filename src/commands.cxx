@@ -1,6 +1,7 @@
 #include "commands.hxx"
 
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <print>
 
@@ -10,13 +11,16 @@ namespace fs = std::filesystem;
 
 namespace commands {
     auto update(const enviroment& env) -> void {
-        const std::string repoFilesPath { fs::current_path() / "files" };
+        const std::string repoFilesPath {
+            fs::absolute(fs::current_path() / "files")
+        };
+
         if (!fs::exists(repoFilesPath))
             if (!fs::create_directory(repoFilesPath))
                 throw std::runtime_error(
                         std::format(
-                            "Error: cannot create repository files directory: "
-                            "[{}]", repoFilesPath));
+                            "Error: cannot create repository files directory: [{}]",
+                            repoFilesPath));
 
         parser p { env.sourcePath };
         for (const auto& filePath : p.lines()) {
@@ -34,15 +38,15 @@ namespace commands {
             if (env.target == "local") {
                 if (!fs::exists(repoFilePath)) {
                     std::println(std::cerr,
-                            "Error: cannot find repository file: [{:20}] [{}]",
-                            filename, repoFilePath);
+                            "Error: cannot find repository file: [{}] [{}]",
+                            hash, repoFilePath);
                     continue;
                 }
 
                 if (!fs::exists(parentPath)
                         && !fs::create_directories(parentPath)) {
                     std::println(std::cerr,
-                            "Error: cannot copy file to local path: [{:20}]\n"
+                            "Error: cannot copy file to local path: [{}]\n"
                             "       cannot create parent path: [{}]", filename,
                             parentPath);
                     continue;
@@ -62,7 +66,7 @@ namespace commands {
                 }
 
                 std::println(std::clog,
-                        "Updating repository file: [{:20}] [{}]", filename,
+                        "Updating repository file: [{:20}] [{}]", hash,
                         repoFilePath);
                 fs::copy(filePath, repoFilePath,
                         fs::copy_options::overwrite_existing);
@@ -74,12 +78,15 @@ namespace commands {
     }
 
     auto diff(const enviroment& env) -> void {
-        std::println("{:22} {:22} status", "filename", "hash");
+        std::println("{:22} | {:22} | status", "filename", "hash");
 
-        const std::string repoFilesPath { fs::current_path() / "files" };
+        const std::string repoFilesPath {
+            fs::absolute(fs::current_path() / "files")
+        };
 
         parser p { env.sourcePath };
         for (const auto& filePath : p.lines()) {
+            const std::string parentPath { fs::path { filePath }.parent_path() };
             const std::string filename { fs::path { filePath }.filename() };
 
             const std::string hash {
@@ -90,18 +97,43 @@ namespace commands {
                 fs::path { repoFilesPath } / hash
             };
 
-            std::print("[{:20}] [{}] ", filename, hash);
+            std::print("[{:20}] | [{}] | ", filename, hash);
 
             if (!fs::exists(repoFilePath)) {
-                std::println("missing");
+                std::println("A");
                 continue;
             } else if (!fs::exists(filePath)) {
-                std::println("missing local");
+                std::println("D");
                 continue;
             }
 
-            // TODO: check file content
-            throw std::runtime_error("Error: commands::diff not implemented yet");
+            std::ifstream localStream { filePath };
+            if (!localStream) {
+                std::println("Error: cannot open local file: [{}] [{}]",
+                        filename, parentPath);
+                continue;
+            }
+
+            std::ifstream repoStream { repoFilePath };
+            if (!repoStream) {
+                std::println("Error: cannot open repository file: [{}] [{}]",
+                        hash, repoFilePath);
+                continue;
+            }
+
+            // size mismatch
+            if (localStream.tellg() != repoStream.tellg()) {
+                std::println("M");
+                continue;
+            }
+
+            localStream.seekg(0, std::ifstream::beg);
+            repoStream.seekg(0, std::ifstream::beg);
+            if (std::equal(std::istreambuf_iterator<char>(localStream.rdbuf()),
+                    std::istreambuf_iterator<char>(),
+                    std::istreambuf_iterator<char>(repoStream.rdbuf())))
+                std::println("OK");
+            else std::println("M");
         }
     }
 } // namespace commands
