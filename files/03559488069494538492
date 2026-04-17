@@ -2,11 +2,15 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
+        messages = { view = "mini", view_warn = "mini" },
         lsp = {
             override = {
                 ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
                 ["vim.lsp.util.stylize_markdown"] = true,
             },
+        },
+        presets = {
+            command_palette = true,
         },
         views = {
             cmdline_popup = {
@@ -16,11 +20,6 @@ return {
                 }
             }
         },
-        init = function()
-            require("notify").setup({
-                background_colour = "#000000",
-            })
-        end
     },
     dependencies = {
         "MunifTanjim/nui.nvim",
