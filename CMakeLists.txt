@@ -19,3 +19,20 @@ target_compile_options(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE include)
+
+# Create symlink for tracked files in build directory
+
+if(WIN32)
+    get_filename_component(REAL_PATH
+        ${CMAKE_CURRENT_SOURCE_DIR}/files REALPATH)
+    string(REPLACE "/" "\\"
+        TARGET_PATH
+        ${REAL_PATH})
+
+    execute_process(
+        COMMAND cmd /C mklink /J files ${TARGET_PATH}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+else()
+    execute_process(
+        COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/files ${CMAKE_CURRENT_BINARY_DIR}/files)
+endif()
