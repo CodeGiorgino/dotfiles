@@ -10,7 +10,9 @@
 namespace fs = std::filesystem;
 
 auto get_repo_files_path(const enviroment& env) -> fs::path {
-    return { fs::absolute(env.program) / "files" };
+    return {
+        fs::absolute(env.program).parent_path() / "files"
+    };
 }
 
 auto get_config_file_path(const enviroment& env) -> fs::path {
@@ -31,11 +33,10 @@ namespace commands {
     auto update(const enviroment& env) -> void {
         const auto repoFilesPath = get_repo_files_path(env);
         if (!fs::exists(repoFilesPath))
-            if (!fs::create_directory(repoFilesPath))
-                throw std::runtime_error(
-                        std::format(
-                            "command error: command {:?}: cannot create repository files directory: [{}]",
-                            env.command, repoFilesPath.string()));
+            throw std::runtime_error(
+                    std::format(
+                        "command error: command {:?}: cannot find repository files directory: [{}]",
+                        env.command, repoFilesPath.string()));
 
         parser p { get_config_file_path(env).string() };
         for (const auto& filePath : p.lines()) {
