@@ -51,7 +51,7 @@ ANSI_BOLD
 ANSI_RESET
 "            -s, --source <file_path>                                          \n"
 "                If specified, use the file provided for the update, otherwise \n"
-"                'files.conf' is used.                                         \n"
+"                '$HOME/.config/dottracker/files.conf' is used.                \n"
 "                                                                              \n"
 "    diff [<-s | --source> <file_path>]                                        \n"
 "        Print a diff of the tracked files:                                    \n"
@@ -65,8 +65,7 @@ ANSI_BOLD
 ANSI_RESET
 "            -s, --source <file_path>                                          \n"
 "                If specified, use the file provided for the diff, otherwise   \n"
-"                'files.conf' is used.                                         \n"
-        );
+"                '$HOME/.config/dottracker/files.conf' is used.");
 }
 
 namespace utils {

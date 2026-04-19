@@ -66,7 +66,7 @@ auto parser::lines(void) noexcept -> std::generator<std::string> {
                 if (!realPart)
                     throw std::runtime_error(
                             std::format(
-                                "parser error: line {:?}: cannot evaluate env variable: {:?}",
+                                "parser error: line {:?}: cannot evaluate enviroment variable: {:?}",
                                 line, partStr));
                 else realFilePath /= std::string { realPart };
             } else realFilePath /= partStr;
